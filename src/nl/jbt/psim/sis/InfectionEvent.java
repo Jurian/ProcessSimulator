@@ -1,4 +1,4 @@
-package nl.jbt.psim.sir;
+package nl.jbt.psim.sis;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,12 +7,12 @@ import nl.jbt.psim.event.Event;
 import nl.jbt.psim.math.CumulativeGammaDistribution;
 import nl.jbt.psim.math.IDistribution;
 
-public class RecoveryEvent extends Event {
+public class InfectionEvent extends Event {
 
-	private final SirSimulator simulator;
+	private final SisSimulator simulator;
 	private final Map<String, Float> stateChange = new HashMap<>();
 	
-	public RecoveryEvent(SirSimulator simulator) {
+	public InfectionEvent(SisSimulator simulator) {
 		this.simulator = simulator;
 		this.currentRate = getRate();
 
@@ -21,7 +21,7 @@ public class RecoveryEvent extends Event {
 
 	@Override
 	public void execute() {
-
+		
 		stateChange.put("s", simulator.susceptibleRate());
 		stateChange.put("i", simulator.infectionRate());
 		
@@ -32,12 +32,12 @@ public class RecoveryEvent extends Event {
 
 	@Override
 	public boolean stopCondition() {
-		return currentRate <= 0.0000001;
+		return false;
 	}
 
 	@Override
 	public float getRate() {
-		return (float) Math.abs(simulator.recoveryRate());
+		return (float) Math.abs(simulator.infectionRate());
 	}
 
 	public void setNextExecutionTime() {
@@ -47,7 +47,7 @@ public class RecoveryEvent extends Event {
 
 	@Override
 	public void beforeExecute() {
-		this.currentRate = getRate();
+		currentRate = getRate();
 	}
 
 	@Override
@@ -57,6 +57,6 @@ public class RecoveryEvent extends Event {
 	
 	@Override
 	public String toString() {
-		return "Recovery event: " + getExecutionTime();
+		return "Infecton event: " + getExecutionTime();
 	}
 }

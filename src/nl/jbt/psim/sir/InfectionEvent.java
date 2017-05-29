@@ -10,21 +10,21 @@ import nl.jbt.psim.math.IDistribution;
 public class InfectionEvent extends Event {
 
 	private final SirSimulator simulator;
-	private final Map<String, Integer> stateChange = new HashMap<>();
+	private final Map<String, Float> stateChange = new HashMap<>();
 	
 	public InfectionEvent(SirSimulator simulator) {
 		this.simulator = simulator;
 		this.currentRate = getRate();
-		
-		stateChange.put("S", -1);
-		stateChange.put("I", 1);
-		stateChange.put("R", 0);
-		
+
 		setNextExecutionTime();
 	}
 
 	@Override
 	public void execute() {
+		
+		stateChange.put("i", simulator.infectionRate());
+		stateChange.put("r", simulator.recoveryRate());
+		
 		setNextExecutionTime();
 		simulator.updateStates(stateChange, simulator.getScheduler().getCurrentTime());
 		simulator.getScheduler().schedule(this);
@@ -32,12 +32,12 @@ public class InfectionEvent extends Event {
 
 	@Override
 	public boolean stopCondition() {
-		return simulator.S() == 0 || simulator.I() == 0 || currentRate == 0;
+		return simulator.s() == 0 || simulator.i() == 0 || currentRate == 0;
 	}
 
 	@Override
-	public double getRate() {
-		return Math.abs(simulator.infectionRate());
+	public float getRate() {
+		return (float) Math.abs(simulator.infectionRate());
 	}
 
 	public void setNextExecutionTime() {

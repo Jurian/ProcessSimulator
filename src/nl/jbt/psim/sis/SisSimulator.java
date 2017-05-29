@@ -1,4 +1,4 @@
-package nl.jbt.psim.sir;
+package nl.jbt.psim.sis;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ import nl.jbt.psim.event.Event;
 import nl.jbt.psim.scheduler.Scheduler;
 import nl.jbt.psim.simulator.Simulator;
 
-public class SirSimulator extends Simulator {
+public class SisSimulator extends Simulator {
 
 	/**
 	 * The average number of infections
@@ -45,21 +45,13 @@ public class SirSimulator extends Simulator {
 		return state.get("i");
 	}
 	
-	/**
-	 * Number of recovered individuals
-	 * @return
-	 */
-	float r() {
-		return state.get("r");
-	}
-	
 	private ChartLogger chartLogger;
 
 
-	public SirSimulator(Scheduler scheduler,  Map<String, Float> beginState) {
+	public SisSimulator(Scheduler scheduler,  Map<String, Float> beginState) {
 		super(scheduler, beginState);
 		
-		this.chartLogger = new ChartLogger(state.keySet(), "SIR Model", "SIR Model", "time", "population");
+		this.chartLogger = new ChartLogger(state.keySet(), "SIS Model", "SIS Model", "time", "population");
 		
 		Event infectionEvent = new InfectionEvent(this);
 		getScheduler().schedule(infectionEvent);
@@ -69,24 +61,24 @@ public class SirSimulator extends Simulator {
 	}
 
 	public float susceptibleRate(){
-		return -beta * s() * i();
+		return -beta * s() * i() + gamma * i();
 	}
 	
 	public float infectionRate() {
 		return beta * s() * i() - gamma * i();
 	}
 
-	public float recoveryRate() {
-		return gamma * i();
-	}
 
 	@Override
 	public String toString() {
-		return "s: " + s() + " i:" + i() + " r:" + r();
+		return "s: " + s() + " i:" + i();
 	}
 	
 	@Override
 	public boolean stopCondition() {
+		
+		
+		
 		return stateCount > 1000;
 	}
 	
@@ -94,6 +86,7 @@ public class SirSimulator extends Simulator {
 		changes.entrySet().forEach(entry -> {
 			float oldState = state.get(entry.getKey());
 			float newState = oldState += entry.getValue();
+			float deltaState = Math.abs(oldState - newState);
 			state.put(entry.getKey(), newState);
 		});
 		stateCount++;
@@ -105,10 +98,9 @@ public class SirSimulator extends Simulator {
 		Map<String, Float> state = new HashMap<>();
 		state.put("s", 1f);
 		state.put("i", 10/7900000f);
-		state.put("r", 0f);
 		
 		Scheduler scheduler = new Scheduler();
-		SirSimulator simulator = new SirSimulator(scheduler, state);
+		SisSimulator simulator = new SisSimulator(scheduler, state);
 
 		JFrame frame = new JFrame();
 		frame.setSize(800, 500);

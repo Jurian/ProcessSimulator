@@ -27,7 +27,7 @@ public abstract class Event implements  Comparable<Event> {
 	
 
 	public abstract boolean stopCondition();
-	public abstract double getRate();
+	public abstract float getRate();
 	
 	@Override
 	public int compareTo(Event other) {

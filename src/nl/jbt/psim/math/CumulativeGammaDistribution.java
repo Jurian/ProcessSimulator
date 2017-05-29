@@ -9,8 +9,8 @@ public class CumulativeGammaDistribution implements IDistribution {
 	public static final Random RANDOM = new Random();
 	private final GammaDistribution gamma;
 	
-	public CumulativeGammaDistribution(double rate) {
-		gamma = new GammaDistribution(1, rate);
+	public CumulativeGammaDistribution(double scale) {
+		gamma = new GammaDistribution(1, scale);
 	}
 	
 	@Override

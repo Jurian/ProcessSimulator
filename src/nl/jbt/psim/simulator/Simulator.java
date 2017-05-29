@@ -9,20 +9,12 @@ public abstract class Simulator {
 	/**
 	 * Initial state of population
 	 */
-	protected final Map<String, Integer> state;
-	
-	/**
-	 * Total population
-	 * 
-	 * @return
-	 */
-	protected int N() {
-		return state.values().stream().mapToInt(x -> x).sum();
-	}
+	protected final Map<String, Float> state;
+
 
 	private Scheduler scheduler;
 	
-	public Simulator(Scheduler scheduler, Map<String, Integer> state) {
+	public Simulator(Scheduler scheduler, Map<String, Float> state) {
 		this.scheduler = scheduler;
 		this.state = state;
 	}
