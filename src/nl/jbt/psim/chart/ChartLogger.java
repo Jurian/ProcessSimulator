@@ -9,10 +9,14 @@ import nl.jbt.psim.state.StateLogger;
 
 public class ChartLogger extends StateLogger {
 
-	public final JFreeChart chart;
+	private final JFreeChart chart;
 	
-	public ChartLogger(Set<String> stateNames, String title, String name, String xAxisLabel, String yAxisLabel) {
+	public ChartLogger(Set<String> stateNames, String title, String xAxisLabel, String yAxisLabel) {
 		super(stateNames);
 		chart = ChartFactory.createScatterPlot(title, xAxisLabel, yAxisLabel, dataseries);
+	}
+
+	public JFreeChart getChart() {
+		return chart;
 	}
 }

@@ -19,7 +19,11 @@ public abstract class StateLogger {
 		}
 	}
 
-	public void addState(double time, Map<String, Float> data) {
+	public void addState(double time, String key, float value) {
+		series.get(key).add(time, value);
+	}
+	
+	public void addStates(double time, Map<String, Float> data) {
 		data.entrySet().forEach(entry -> {
 			series.get(entry.getKey()).add(time, entry.getValue());
 		});
